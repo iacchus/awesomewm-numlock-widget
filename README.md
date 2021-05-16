@@ -1,17 +1,28 @@
-# A simple CAPS LOCK widget for Awesome
+# A simple NUM LOCK widget for Awesome
 
-Useful when you have a keyboard that does not have a CAPS LOCK indicator.
+(changed from original https://github.com/stefano-m/awesome-numlock_widget)
+
+(**See also** the [AwesomeWM Caps Lock widget](https://github.com/iacchus/awesomewm-capslock-widget))
+
+Useful when you have a keyboard that does not have a NUM LOCK indicator.
 
 This widget is really simple and parses the output of `xset` to figure out
-whether CAPS LOCK is active or not. (Hint: you need the `xset` utility for this
+whether NUM LOCK is active or not. (Hint: you need the `xset` utility for this
 widget to work)
+
+This script is simple and you can edit the file `init.lua` if you want to change
+it.
 
 # Installation
 
 1. Ensure that `xset` is available to you on your system.
-2. Copy `capslock.lua` in your `~/.config/awesome/ folder` (e.g. by cloning this
-   repository).
-3. Restart Awesome (e.g. press `modkey + Control` or run `awesome-client
+2. Clone this repository in your `~/.config/awesome/` folder.
+   ```
+   cd ~/.config/awesome/
+   git clone git@github.com:iacchus/awesomewm-numlock-widget.git
+   ```
+3. Refer to **Usage** (below.) and follow it's three steps.
+4. Restart Awesome (e.g. press `modkey + Control + R` or run `awesome-client
    "awesome.restart()"` from a terminal).
 
 # Usage
@@ -19,53 +30,55 @@ widget to work)
 For **Awesome 4.x**, add the following to your `~/.config/awesome/rc.lua`:
 
 ``` lua
--- If you just copied the file in ~/.config/awesome
-local capslock = require("capslock")
+-- FIRST. If you just cloned the repo in ~/.config/awesome/ require the module
+--          at the beginning of the file (anywhere there should be ok.):
+local numlock = require("awesomewm-numlock-widget")
 
--- If you cloned the repo as a submodule in
--- ~/.config/awesome/external/capslock
--- local capslock = require("external.capslock.capslock")
+-- etcetc... more config here...
 
--- more config here
-
-    -- Add widgets to the wibox
+-- SECOND. Add the widget to the wibox: Look for "-- Right widgets",
+--           as shown below, and add the line `numlock,` where you want to
+--           see the widget (pay attention to the ending commas `,`):
     s.mywibox:setup {
--- more config here
+
+      -- more config here...
+
       { -- Right widgets
         layout = wibox.layout.fixed.horizontal,
         wibox.widget.systray(),
-        capslock,
--- more config here
+        numlock,
+        -- more config here
+
+-- THIRD. Add the keybinding to `global_keys` so that the widget can change state
+--          on keypress, by adding the line `numlock.key` there:
+--
 -- {{{ Key bindings
 local globalkeys = awful.util.table.join(
-  capslock.key,
+  numlock.key,
 -- more config follows
 ```
 
-Now, when CAPS LOCK is active, an uppercase letter **A** will be displayed
+Now:
 
-![active_capslock screenshot](/screenshots/active_capslock_widget.png?raw=true)
+* when NUM LOCK is active, a **+numlock** will be displayed
+* when NUM LOCK is inactive, a text **-numlock** will be displayed
 
-when CAPS LOCK is inactive, a lowecase letter **a** will be displayed:
-
-![inactive_capslock screenshot](/screenshots/inactive_capslock_widget.png?raw=true)
 
 These can be changed by changing the `activated` and `deactivated`
-attributes of the widget
-as
-[Pango markup](https://developer.gnome.org/pango/stable/PangoMarkupFormat.html)
+attributes of the widget as
+[Pango markup](https://developer.gnome.org/pygtk/stable/pango-markup-language.html)
 strings. You will probably need to adjust the `forced_width` attribute too.
 
 For example:
 
 ``` lua
-local capslock = require("capslock")
-capslock.forced_width = 35
-capslock.activated = "<u>CAPS</u>"
-capslock.deactivated = "<u>caps</u>"
+local numlock = require("awesomewm-numlock-widget")
+numlock.forced_width = 35
+numlock.activated = "<u>NUM</u>"
+numlock.deactivated = "<u>num</u>"
 ```
 
-When the mouse is over the widget, a tooltip that says `Caps Lock on`/`Caps
+When the mouse is over the widget, a tooltip that says `Num Lock on`/`Num
 Lock off` is also shown.
 
 # Contributing

@@ -18,52 +18,52 @@
 ]]
 
 --[[
-  A simple widget to show whether Caps Lock is active.
+  A simple widget to show whether num Lock is active.
   Requirements:
   - Awesome 4.x
   - xset
 
   @usage
-  capslock = require("capslock")
+  numlock = require("numlock")
   -- Add widget to wibox
   s.mywibox:setup {
   layout = wibox.layout.align.horizontal,
   { -- Left widgets
     layout = wibox.layout.fixed.horizontal,
-    capslock
+    numlock
   }
   -- more stuff
   }
   -- Add key to globalkeys
-  globalkeys = awful.util.table.join(globalkeys, capslock.key)
+  globalkeys = awful.util.table.join(globalkeys, numlock.key)
 
 ]]
 
 local awful = require("awful")
 local wibox = require("wibox")
 
-local capslock = wibox.widget {
+local numlock = wibox.widget {
   widget = wibox.widget.textbox,
   align = "center",
   valign = "center",
-  forced_width = 15,
+  --forced_width = 15,
 }
 
-capslock.activated = "<b>A</b>"
-capslock.deactivated = "<b>a</b>"
+numlock.activated = "<b>+numlock</b>"
+numlock.deactivated = "<b>-numlock</b>"
 
 local tooltip = awful.tooltip({})
 
-tooltip:add_to_object(capslock)
+tooltip:add_to_object(numlock)
 
-function capslock:check()
+function numlock:check()
   awful.spawn.with_line_callback(
     "bash -c 'sleep 0.2 && xset q'",
     {
       stdout = function (line)
-        if line:match("Caps Lock") then
-          local status = line:gsub(".*(Caps Lock:%s+)(%a+).*", "%2")
-          tooltip.text = "Caps Lock " .. status
+        if line:match("Num Lock") then
+          local status = line:gsub(".*(Num Lock:%s+)(%a+).*", "%2")
+          tooltip.text = "Num Lock " .. status
           if status == "on" then
             self.markup = self.activated
           else
@@ -75,11 +75,11 @@ function capslock:check()
   )
 end
 
-capslock.key = awful.key(
+numlock.key = awful.key(
   {},
-  "Caps_Lock",
-  function () capslock:check() end)
+  "Num_Lock",
+  function () numlock:check() end)
 
-capslock:check()
+numlock:check()
 
-return capslock
+return numlock
